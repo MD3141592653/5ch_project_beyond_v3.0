@@ -1,0 +1,75 @@
+services:
+  archive-db:
+    image: postgres:16-alpine
+    container_name: 5ch-archive-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: archive
+      POSTGRES_USER: muraoka
+      POSTGRES_PASSWORD: postgre1234
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U muraoka -d archive"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - archive-network
+
+  archive-web:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: 5ch-archive-web
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: archive-db
+      DB_PORT: "5432"
+      DB_NAME: archive
+      DB_USER: muraoka
+      DB_PASSWORD: postgre1234
+      PORT: "5000"
+      PYTHONUNBUFFERED: "1"
+    volumes:
+      - ./logs:/logs
+    depends_on:
+      archive-db:
+        condition: service_healthy
+    networks:
+      - archive-network
+
+  archive-importer:
+    build:
+      context: ./importer
+      dockerfile: Dockerfile
+    container_name: 5ch-archive-importer
+    environment:
+      DB_HOST: archive-db
+      DB_PORT: "5432"
+      DB_NAME: archive
+      DB_USER: muraoka
+      DB_PASSWORD: postgre1234
+      ARCHIVE_JSONL_DIR: /archive/jsonl
+      LOG_DIR: /logs
+      PYTHONUNBUFFERED: "1"
+      IMPORT_INTERVAL_SEC: "0"
+      BATCH_SIZE: "5000"
+    volumes:
+      - ./5ch_project_beyond/jsonl:/archive/jsonl:ro
+      - ./logs:/logs
+    depends_on:
+      archive-db:
+        condition: service_healthy
+    networks:
+      - archive-network
+
+networks:
+  archive-network:
+    driver: bridge
