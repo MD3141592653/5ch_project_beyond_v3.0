@@ -1,0 +1,41 @@
+# OS固有ファイル
+.DS_Store
+Thumbs.db
+
+# ログファイル
+logs/
+*.log
+
+# 環境設定ファイル
+.env
+*.local
+
+# Pythonキャッシュ
+__pycache__/
+*.pyc
+
+# Node.js（もし使用する場合）
+node_modules/
+
+# Docker関連ビルド成果物
+*.pid
+*.sock
+
+# PostgreSQL永続化データ
+data/postgres/
+
+# DBバックアップファイル
+backups/
+
+# JSONLファイル全般
+*.jsonl
+
+# 特定ディレクトリのJSONL原本
+5ch_project_beyond/jsonl/
+
+# IDE設定
+.vscode/
+.idea/
+
+# 除外例: このファイルは追跡する
+!important.log
