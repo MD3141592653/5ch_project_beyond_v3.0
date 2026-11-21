@@ -62,8 +62,8 @@
 ## 2. データベース仕様
 
 - **Database**: `archive`
-- **User / Role**: `muraoka`
-- **Password**: `postgre1234`
+- **User / Role**: `*******`
+- **Password**: `***********`
 - **Port**: `5432`
 
 ### テーブル構成
