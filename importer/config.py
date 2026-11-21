@@ -11,8 +11,8 @@ PROJECT_ROOT = ROOT.parent
 DB_HOST = os.environ.get("DB_HOST", "archive-db")
 DB_PORT = int(os.environ.get("DB_PORT", "5432"))
 DB_NAME = os.environ.get("DB_NAME", "archive")
-DB_USER = os.environ.get("DB_USER", "muraoka")
-DB_PASSWORD = os.environ.get("DB_PASSWORD", "postgre1234")
+DB_USER = os.environ.get("DB_USER", "*******") # 認証情報は適宜設定してください
+DB_PASSWORD = os.environ.get("DB_PASSWORD", "***********")
 
 # Paths and importer parameters
 DEFAULT_JSONL_DIR = Path(os.environ.get("ARCHIVE_JSONL_DIR", PROJECT_ROOT / "5ch_project_beyond" / "jsonl"))
